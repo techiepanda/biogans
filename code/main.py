@@ -53,7 +53,7 @@ parser.add_argument('--wgan_clamp_upper', type=float, default=0.01, help='for WG
 parser.add_argument('--wgangp_lambda', type=float, default=10.0, help='for WGAN-GP')
 
 # optimization
-parser.add_argument('--num_iter', type=int, default=3000, help='number of iterations to train for')
+parser.add_argument('--num_iter', type=int, default=20, help='number of iterations to train for')
 parser.add_argument('--optimizer', type=str, default='default', help='optimizer to use for training: default (depends on GAN_algorithm) | adam | rmsprop ')
 parser.add_argument('--lrD', type=float, default=None, help='learning rate for Critic, default: depends on GAN_algorithm and optimizer')
 parser.add_argument('--lrG', type=float, default=None, help='learning rate for Generator, default: depends on GAN_algorithm and optimizer')
@@ -63,7 +63,7 @@ parser.add_argument('--beta2', type=float, default=None, help='beta2 for adam. d
 # logging
 parser.add_argument('--experiment', default=None, help='Where to store samples and models')
 parser.add_argument('--save_iter', type=int, default=None, help='How often to save models')
-parser.add_argument('--image_iter', type=int, default=500, help='How often to draw samples from the models')
+parser.add_argument('--image_iter', type=int, default=10, help='How often to draw samples from the models')
 parser.add_argument('--fixed_noise_file', type=str, default='', help='File to get shared fixed noise (to evaluate samples)')
 parser.add_argument('--prefix_fake_samples', type=str, default='fake_samples', help='Fake image prefix')
 parser.add_argument('--prefix_real_samples', type=str, default='real_samples', help='Fake image prefix')

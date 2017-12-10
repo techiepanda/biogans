@@ -29,6 +29,7 @@ def read_image_for_pytorch(image_file_name):
 
 def read_all_images(root, num_workers=4):
     classes, class_to_idx = find_classes(root)
+    print("classes ", classes)
     dataset = make_dataset(root, class_to_idx)
     if len(dataset) == 0:
         raise (RuntimeError("Found 0 images in subfolders of: " + root + "\n" +

@@ -135,7 +135,7 @@ class GAN_base():
             model_saved = False
             if opt.save_iter is not None and (i_iter + 1) % opt.save_iter == 0:
                 model_saved = True
-            if (i_iter + 1) in [10, 100, 1000, 2000, 3000, 5000, 10000, 30000, 50000, 100000, 300000, 500000]:
+            if (i_iter + 1) in [10, 20, 100, 1000, 2000, 3000, 5000, 10000, 30000, 50000, 100000, 300000, 500000]:
                 model_saved = True
 
             if model_saved:

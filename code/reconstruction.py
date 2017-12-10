@@ -14,7 +14,7 @@ from utils import pad_channels
 import nearest_neighbors
 
 
-def run_experiment(netG, dataloader_test, nn_path, opt, optimize_red_first=False, n_bfgs_iter=50, lbfgs_lr=0.05, num_lbfgs_trials=5):
+def run_experiment(netG, dataloader_test, nn_path, opt, optimize_red_first=False, n_bfgs_iter=20, lbfgs_lr=0.05, num_lbfgs_trials=5):
     """
     Optimize over the latent noise to try to reconstruct a target image.
     """

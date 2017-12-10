@@ -1,7 +1,7 @@
 import os
 import random
 
-classes_of_interest = ['Alp14', 'Arp3', 'Cki2', 'Mkh1', 'Sid2', 'Tea1']
+classes_of_interest = ['yeast']
 
 data_root = '../../data'
 data_paths = ['LIN_Normalized_WT_size-48-80_6class_train',
