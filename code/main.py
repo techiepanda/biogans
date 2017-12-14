@@ -104,42 +104,6 @@ execution_mode = opt.mode.casefold()
 opt.mean_val = 0.5
 opt.std_val = 0.5
 
-def create_dataset(data_path, red_nn_file=opt.red_nn_file):
-    if dataset_type == 'folder':
-        # for the regular 'folder' dataset, the normalization has to have the 3 image channels explicitly
-        image_normalization = transforms.Normalize((opt.mean_val,) * 3, (opt.std_val,) * 3)
-        dataset = dset.ImageFolder(root=data_path,
-                                   transform=transforms.Compose([
-                                       transforms.Scale((opt.image_width, opt.image_height)),
-                                       transforms.CenterCrop((opt.image_height, opt.image_width)),
-                                       transforms.RandomHorizontalFlip(),
-                                       RandomVerticalFlip(),
-                                       transforms.ToTensor(),
-                                       image_normalization,
-                                   ]))
-    elif dataset_type == 'folder-cached':
-        # for the 'folder-cached' dataset and the datasets below, the same 1-channel normalization is applied to all the channels
-        image_normalization = transforms.Normalize((opt.mean_val,) * 1, (opt.std_val,) * 1)
-        image_cache = read_all_images(data_path, opt.num_workers)
-        dataset = ImageFolderWithCache(data_path, image_cache, do_random_flips=True,
-                                       normalization=image_normalization)
-    elif dataset_type == 'conditional-cached':
-        image_normalization = transforms.Normalize((opt.mean_val,) * 1, (opt.std_val,) * 1)
-        dataset = dcgan_starshaped.DatasetConditionalCached(data_path, do_random_flips=True,
-                                                     num_workers=opt.num_workers, normalization=image_normalization)
-    elif dataset_type == 'fake-multichannel':
-        image_normalization = transforms.Normalize((opt.mean_val,) * 1, (opt.std_val,) * 1)
-        image_cache = read_all_images(data_path, opt.num_workers)
-        assert red_nn_file
-        print('Reading the nn file', red_nn_file)
-        nn_dict = torch.load(red_nn_file)
-        dataset = CompositeImageFolder(data_path, nn_dict, image_cache, do_random_flips=True,
-                                       normalization=image_normalization)
-    else:
-        raise RuntimeError("Unknown dataset type: {0}".format(opt.dataset_type))
-    return dataset
-
-
 def create_dataloader(dataset, shuffle=True):
     assert dataset
     if dataset_type == 'conditional-cached':
@@ -148,6 +112,17 @@ def create_dataloader(dataset, shuffle=True):
         dataloader = torch.utils.data.DataLoader(dataset, batch_size=opt.batch_size, shuffle=shuffle,
                                                  num_workers=opt.num_workers)
     return dataloader
+
+def create_dataset(data_path, red_nn_file=opt.red_nn_file):
+    if dataset_type == 'folder-cached':
+        # for the 'folder-cached' dataset and the datasets below, the same 1-channel normalization is applied to all the channels
+        image_normalization = transforms.Normalize((opt.mean_val,) * 1, (opt.std_val,) * 1)
+        image_cache = read_all_images(data_path, opt.num_workers)
+        dataset = ImageFolderWithCache(data_path, image_cache, do_random_flips=True,
+                                       normalization=image_normalization)
+    else:
+        raise RuntimeError("Unknown dataset type: {0}".format(opt.dataset_type))
+    return dataset
 
 
 # training set
@@ -177,50 +152,11 @@ opt.n_extra_layers = int(opt.n_extra_layers)
 opt.g_input_size = opt.nz
 
 # create the models
-if gan_algorithm == 'wgan-gp':
-    batch_norm_in_disc = False
-else:
-    batch_norm_in_disc = True
+batch_norm_in_disc = False
 
 if model_type == 'dcgan':
     opt.separable_gen = False
     netG = dcgan.DCGAN_G((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ngf, opt.n_extra_layers, red_portion=None)
-    netD = dcgan.DCGAN_D((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ndf, opt.n_extra_layers,
-                         use_batch_norm=batch_norm_in_disc)
-elif model_type == 'dcgan-sep':
-    opt.separable_gen = True
-    netG = dcgan.DCGAN_G((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ngf, opt.n_extra_layers, red_portion=opt.red_portion)
-    netD = dcgan.DCGAN_D((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ndf, opt.n_extra_layers,
-                         use_batch_norm=batch_norm_in_disc)
-elif model_type in 'dcgan-star-shaped':
-    opt.separable_gen = True
-    netG = dcgan_starshaped.DCGAN_G_starShaped((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ngf,
-                                               opt.n_classes, red_portion=opt.red_portion)
-    netD = dcgan_starshaped.DCGAN_D_starShaped((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ndf,
-                                               opt.n_classes, opt.n_extra_layers, use_batch_norm=batch_norm_in_disc)
-elif model_type == 'dcgan-independent':
-    opt.separable_gen = False
-    netG = dcgan_starshaped.DCGAN_G_independent((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ngf,
-                                            opt.n_classes, red_portion=None)
-    netD = dcgan_starshaped.DCGAN_D_starShaped((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ndf,
-                                               opt.n_classes, opt.n_extra_layers, use_batch_norm=batch_norm_in_disc)
-
-elif model_type == 'dcgan-sep-independent':
-    opt.separable_gen = True
-    netG = dcgan_starshaped.DCGAN_G_independent((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ngf,
-                                                opt.n_classes, red_portion=opt.red_portion)
-    netD = dcgan_starshaped.DCGAN_D_starShaped((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ndf,
-                                               opt.n_classes, opt.n_extra_layers, use_batch_norm=batch_norm_in_disc)
-elif model_type == 'dcgan-multichannel':
-    opt.nc = opt.n_classes + 1
-    opt.separable_gen = False
-    netG = dcgan.DCGAN_G((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ngf, opt.n_extra_layers, red_portion=None)
-    netD = dcgan.DCGAN_D((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ndf, opt.n_extra_layers,
-                         use_batch_norm=batch_norm_in_disc)
-elif opt.model_type == 'dcgan-sep-multichannel':
-    opt.nc = opt.n_classes + 1
-    opt.separable_gen = True
-    netG = dcgan.DCGAN_G((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ngf, opt.n_extra_layers, red_portion=opt.red_portion)
     netD = dcgan.DCGAN_D((opt.image_height, opt.image_width), opt.g_input_size, opt.nc, opt.ndf, opt.n_extra_layers,
                          use_batch_norm=batch_norm_in_disc)
 else:
