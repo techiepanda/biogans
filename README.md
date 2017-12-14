@@ -1,18 +1,16 @@
-# GANs for Biological Image Synthesis
-This codes implements the ICCV-2017 paper "GANs for Biological Image Synthesis". The paper and its supplementary materials is available on [arXiv](https://arxiv.org/abs/1708.04692).
+# GAN for yeast cells
+This codes modify the implementation of the ICCV-2017 paper "GANs for Biological Image Synthesis" for generating images of Yeast cell.
 
-This code contains the following pieces:
-- implementation of [DCGAN](https://github.com/pytorch/examples/tree/master/dcgan), [WGAN](https://github.com/martinarjovsky/WassersteinGAN), [WGAN-GP](https://github.com/igul222/improved_wgan_training)
-- implementation of green-on-red separable DCGAN, multi-channel DCGAN, star-shaped DCGAN (see our ICCV 2017 paper for details)
-- implementation of the evaluation techniques: classifier two-samples test and reconstruction of the test set
+This code contains the following code related to generating fakes images of yeast cell:
+- implementation of [WGAN-GP](https://github.com/igul222/improved_wgan_training)
 
 The code is released under Apache v2 License allowing to use the code in any way you want.
-For the license on the LIN dataset, please contact the authors of Dodgson et al. (2017).
 
-As a teaser, we show our final results (animated interpolations that mimic the cell growth cycle) right away:
-![lin_movie2.gif](http://www.di.ens.fr/sierra/research/biogans/lin_movie2.gif "Cell cycle reconstruction 2")
-![lin_movie3.gif](http://www.di.ens.fr/sierra/research/biogans/lin_movie3.gif "Cell cycle reconstruction 3")
-![lin_movie1.gif](http://www.di.ens.fr/sierra/research/biogans/lin_movie1.gif "Cell cycle reconstruction 1")
+Generated fake images of yeast cell:
+![Generated image](https://github.com/geekyspartan/biogans/blob/ec85df2c354e4154c23f933a8d3308310363d4ff/models/size-48-80_6class_wgangp-adam/15000_grayscale.png "Generated image after 15000 iterations")
+
+Original images of yeast cell:
+
 
 ### Citation
 
