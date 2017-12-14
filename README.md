@@ -10,7 +10,7 @@ Generated fake images of yeast cell:
 ![Generated image](https://github.com/geekyspartan/biogans/blob/ec85df2c354e4154c23f933a8d3308310363d4ff/models/size-48-80_6class_wgangp-adam/15000_grayscale.png "Generated image after 15000 iterations")
 
 Original images of yeast cell:
-
+![Original yeast cell image](https://github.com/geekyspartan/biogans/blob/ec85df2c354e4154c23f933a8d3308310363d4ff/models/size-48-80_6class_wgangp-adam/original_image.png "Original yeast cell image")
 
 ### Citation
 
