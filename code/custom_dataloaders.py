@@ -17,13 +17,13 @@ def read_image_for_pytorch(image_file_name):
     if img.mode == 'YCbCr':
         nchannel = 3
     else:
-        nchannel = 1#len(img.mode)
+        nchannel = len(img.mode)
 
     # convert to numpy array
     img = np.array(img.getdata()).reshape(img.size[1], img.size[0], nchannel)
 
     # permute dimensions
-    img = np.transpose(img).copy()
+    img = np.transpose(img, (2,0,1)).copy()
     return img
 
 
