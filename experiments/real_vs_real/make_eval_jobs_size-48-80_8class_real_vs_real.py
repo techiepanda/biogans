@@ -17,7 +17,7 @@ os.system('mkdir -p {0}'.format(EVAL_OUTPUT_PATH))
 
 NUM_SPLITS = 10
 RAND_SEED = 0
-CLASSES = ['Alp14', 'Arp3', 'Cki2', 'Mkh1', 'Sid2', 'Tea1', 'Fim1', 'Tea4']
+CLASSES = ['yeast']
 
 EVAL_METHODS = ['WGAN-GP']
 EVAL_METHOD_PARAMS = ['--model_type DCGAN --optimizer adam --lrD 0.0001 --lrG 0.0001 --beta1 0.0 --beta2 0.9']

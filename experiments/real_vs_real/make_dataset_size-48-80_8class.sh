@@ -3,7 +3,7 @@ IMAGE_SIZE='48-80'
 DATASET_SOURCE='LIN_Normalized_WT_size-'${IMAGE_SIZE}
 DATASET_NAME=${DATASET_SOURCE}'_8class'
 
-CLASSES='Alp14 Arp3 Cki2 Mkh1 Sid2 Tea1 Fim1 Tea4'
+CLASSES='yeast'
 SPLITS='train test'
 
 for SPLIT in ${SPLITS};
