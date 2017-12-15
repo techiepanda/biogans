@@ -63,7 +63,7 @@ parser.add_argument('--beta2', type=float, default=None, help='beta2 for adam. d
 # logging
 parser.add_argument('--experiment', default=None, help='Where to store samples and models')
 parser.add_argument('--save_iter', type=int, default=None, help='How often to save models')
-parser.add_argument('--image_iter', type=int, default=10, help='How often to draw samples from the models')
+parser.add_argument('--image_iter', type=int, default=50, help='How often to draw samples from the models')
 parser.add_argument('--fixed_noise_file', type=str, default='', help='File to get shared fixed noise (to evaluate samples)')
 parser.add_argument('--prefix_fake_samples', type=str, default='fake_samples', help='Fake image prefix')
 parser.add_argument('--prefix_real_samples', type=str, default='real_samples', help='Fake image prefix')
